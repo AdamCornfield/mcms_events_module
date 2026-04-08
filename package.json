@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/AdamCornfield/MCMS_demo_module/issues"
   },
-  "homepage": "https://github.com/AdamCornfield/MCMS_demo_module#readme"
+  "homepage": "https://github.com/AdamCornfield/MCMS_demo_module#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "luxon": "^3.7.2",
+    "uuid": "^13.0.0"
+  }
 }

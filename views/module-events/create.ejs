@@ -1,0 +1,63 @@
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="w-50 my-4">
+
+        <h3 class="mb-4">Create Event</h3>
+        
+        <% if (errors && errors.length > 0) { %>
+            <div class="alert alert-danger show" role="alert">
+                <ul class="mb-0">
+                    <% errors.forEach(error => { %>
+                        <li><%= error.message %></li>
+                    <% }) %>
+                </ul>
+            </div>
+        <% } %>
+
+        <form action="/events/create" method="POST">
+
+            <!-- Event Name -->
+            <div class="mb-3">
+                <label class="form-label">Event Name</label>
+                <input type="text" class="form-control" name="name" required>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" name="description" rows="4" required></textarea>
+            </div>
+
+            <hr>
+
+            <!-- Start Time -->
+            <div class="mb-3">
+                <label class="form-label">Start Time</label>
+                <input type="datetime-local" class="form-control" name="start" required>
+            </div>
+
+            <!-- End Time -->
+            <div class="mb-3">
+                <label class="form-label">End Time</label>
+                <input type="datetime-local" class="form-control" name="end" required>
+            </div>
+
+            <hr>
+
+            <!-- Tags (empty for now) -->
+            <div class="mb-3">
+                <label class="form-label">Tags</label>
+                <select class="form-select" name="tags">
+                    <option value="">Select a tag (coming soon)</option>
+                </select>
+            </div>
+
+            <hr>
+
+            <!-- Submit -->
+            <button type="submit" class="btn btn-primary w-100">
+                Create Event
+            </button>
+
+        </form>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+<div class="container my-4">
+    <h2 class="mb-4">Events</h2>
+
+    <div class="row g-3">
+        <% events.forEach(event => { %>
+            <div class="col-12">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+
+                        <!-- Title -->
+                        <h5 class="card-title mb-2">
+                            <%= event.name %>
+                        </h5>
+
+                        <!-- Description (2 line clamp with fade) -->
+                        <p class="card-text text-muted mb-3 description-clamp">
+                            <%= event.description %>
+                        </p>
+
+                        <!-- Date / Time -->
+                        <div class="small text-secondary">
+                            <div>
+                                <strong>Start:</strong>
+                                <%= event.start.toFormat("dd LLL yyyy, HH:mm") %>
+                            </div>
+                            <div>
+                                <strong>End:</strong>
+                                <%= event.end.toFormat("dd LLL yyyy, HH:mm") %>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</div>

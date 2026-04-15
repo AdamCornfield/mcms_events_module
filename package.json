@@ -1,5 +1,5 @@
 {
-  "name": "mcms_demo_module",
+  "name": "mcms_events_module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AdamCornfield/MCMS_demo_module.git"
+    "url": "git+https://github.com/AdamCornfield/mcms_events_module.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/AdamCornfield/MCMS_demo_module/issues"
+    "url": "https://github.com/AdamCornfield/mcms_events_module/issues"
   },
-  "homepage": "https://github.com/AdamCornfield/MCMS_demo_module#readme",
+  "homepage": "https://github.com/AdamCornfield/mcms_events_module#readme",
   "dependencies": {
     "express": "^5.2.1",
     "luxon": "^3.7.2",

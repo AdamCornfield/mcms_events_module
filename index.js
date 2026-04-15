@@ -8,6 +8,8 @@ module.exports =  ({ auth, func, db, valid}) => {
     
     let DateTime = luxon.DateTime
 
+    const moduleName = 'events' // Set this to the name of your module, it should not include the full tag used, for example the MCMS_events_module, will just be events
+
     router.get('/', (req, res) => {
             db.query('SELECT * FROM events WHERE end >= UNIX_TIMESTAMP()', (err, results) => {
                 if (err) {
@@ -28,7 +30,7 @@ module.exports =  ({ auth, func, db, valid}) => {
                             res.render('default', {
                                 isAuthenticated: req.isAuthenticated(),
                                 userData,
-                                pagePath: 'module-events/home',
+                                pagePath: `module-${moduleName}/home`,
                                 pageTitle: 'Community Events - MCMS',
                                 events: results
                             })
@@ -48,7 +50,7 @@ module.exports =  ({ auth, func, db, valid}) => {
                 res.render('default', {
                     isAuthenticated: req.isAuthenticated(),
                     userData,
-                    pagePath: 'module-events/create',
+                    pagePath: `module-${moduleName}/create`,
                     pageTitle: 'Create Event - MCMS',
                     errors: [],
                     formData: {}
@@ -114,7 +116,7 @@ module.exports =  ({ auth, func, db, valid}) => {
                     res.render('default', {
                         isAuthenticated: req.isAuthenticated(),
                         userData,
-                        pagePath: 'module-events/create',
+                        pagePath: `module-${moduleName}/create`,
                         pageTitle: 'Create Event - MCMS',
                         errors: errors,
                         formData: {
@@ -178,7 +180,7 @@ module.exports =  ({ auth, func, db, valid}) => {
                         res.render('default', {
                             isAuthenticated: req.isAuthenticated(),
                             userData,
-                            pagePath: 'module-events/edit',
+                            pagePath: `module-${moduleName}/edit`,
                             pageTitle: 'Edit Event - MCMS',
                             event,
                             errors: []
@@ -249,7 +251,7 @@ module.exports =  ({ auth, func, db, valid}) => {
                     res.render('default', {
                         isAuthenticated: req.isAuthenticated(),
                         userData,
-                        pagePath: 'module-events/edit',
+                        pagePath: `module-${moduleName}/edit`,
                         pageTitle: 'Edit Event - MCMS',
                         errors: errors,
                         event: {
@@ -323,8 +325,8 @@ module.exports =  ({ auth, func, db, valid}) => {
 
     return {
         router,
-        viewsPath: path.join(__dirname, '/views'),
-        staticPath: path.join(__dirname, '/public'),
-        basePath: '/events'
+        viewsPath: path.join(__dirname, '/views'), // Injects the custom views for this module.
+        staticPath: path.join(__dirname, '/public'), // Injects the static files location for this module.
+        basePath: `/${moduleName}` // This is the base path that will be used for static file serving, so a css file in this module's public folder would be found at public/demo/styles.css
     }
 }

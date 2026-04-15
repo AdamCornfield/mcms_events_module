@@ -1,7 +1,7 @@
 <div class="container d-flex justify-content-center align-items-center">
     <div class="w-50 my-4">
 
-        <h3 class="mb-4">Create Event</h3>
+        <h3 class="mb-4">Edit Event</h3>
         
         <% if (errors && errors.length > 0) { %>
             <div class="alert alert-danger show" role="alert">
@@ -13,23 +13,23 @@
             </div>
         <% } %>
 
-        <form action="/events/create" method="POST">
+        <form action="/events/edit/<%= event.eventID %>" method="POST">
             <div class="mb-3">
                 <label class="form-label">Event Name</label>
-                <input type="text" class="form-control" name="name" value="<%= formData?.name || '' %>"  required>
+                <input type="text" class="form-control" name="name" value="<%= event?.name || '' %>"  required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Description</label>
-                <textarea class="form-control" name="description" rows="4" required><%= formData?.description || '' %></textarea>
+                <textarea class="form-control" name="description" rows="4" required><%= event?.description || '' %></textarea>
             </div>
             <hr>
             <div class="mb-3">
                 <label class="form-label">Start Time</label>
-                <input type="datetime-local" class="form-control" name="start" value="<%= formData?.start || '' %>"  required>
+                <input type="datetime-local" class="form-control" name="start" value="<%= event?.start.toFormat("yyyy-MM-dd'T'HH:mm") || '' %>"  required>
             </div>
             <div class="mb-3">
                 <label class="form-label">End Time</label>
-                <input type="datetime-local" class="form-control" name="end" value="<%= formData?.end || '' %>" required>
+                <input type="datetime-local" class="form-control" name="end" value="<%= event?.end.toFormat("yyyy-MM-dd'T'HH:mm") || '' %>" required>
             </div>
             <hr>
             <div class="mb-3">
@@ -40,7 +40,7 @@
             </div>
             <hr>
             <button type="submit" class="btn btn-primary w-100">
-                Create Event
+                Update Event
             </button>
         </form>
     </div>

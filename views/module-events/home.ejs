@@ -1,24 +1,24 @@
 <div class="container my-4">
-    <h2 class="mb-4">Events</h2>
+    <div class="d-flex justify-content-between">
+        <div>
+            <h2 class="mb-4">Events</h2>
+        </div>
+        <div>
+            <a class="btn btn-success" href="/events/create">Create New Event</a>
+        </div>
+    </div>
+
+    
 
     <div class="row g-3">
         <% events.forEach(event => { %>
-            <div class="col-12">
+            <div class="col-12 col-md-6 col-lg-4">
                 <div class="card shadow-sm h-100">
+                    <img src="/public/img/homeImage.jpg" class="card-img-top">
                     <div class="card-body">
-
-                        <!-- Title -->
-                        <h5 class="card-title mb-2">
-                            <%= event.name %>
-                        </h5>
-
-                        <!-- Description (2 line clamp with fade) -->
-                        <p class="card-text text-muted mb-3 description-clamp">
-                            <%= event.description %>
-                        </p>
-
-                        <!-- Date / Time -->
-                        <div class="small text-secondary">
+                        <h3 class="card-title mb-2"><%= event.name %></h3>
+                        <p class="card-text text-muted mb-3 description-clamp"><%= event.description %></p>
+                        <div class="">
                             <div>
                                 <strong>Start:</strong>
                                 <%= event.start.toFormat("dd LLL yyyy, HH:mm") %>
@@ -28,8 +28,28 @@
                                 <%= event.end.toFormat("dd LLL yyyy, HH:mm") %>
                             </div>
                         </div>
-
                     </div>
+                    <% if (userData.perms.ADMINISTRATOR === true || userData.perms.MANAGE_EVENTS === true) { %>
+                    <div class="card-footer">
+                        <!-- <a class="btn btn-success" href="/events/view/<%= event.eventID %>">View More Details</a> -->
+                        <a class="btn btn-primary" href="/events/edit/<%= event.eventID %>">Edit Event</a>
+                        <div class="btn-group dropdown-center">
+                            <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                DELETE EVENT
+                            </button>
+                            <ul class="dropdown-menu" style="width:400px !important;">
+                                <form action="/events/delete/<%= event.eventID %>" method="POST" class="px-4 py-3">
+                                    <p class="text-danger mb-1">WARNING: THIS ACTION CANNOT BE UNDONE</p>
+                                    <p class="text-danger mb-1">To confirm deletion, re-type the event name into the box below.</p>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" id="confirmDeleteText" name="confirmDeleteText" placeholder="<%= event.name %>">
+                                    </div>
+                                    <button type="submit" class="btn btn-danger">DELETE</button>
+                                </form>
+                            </ul>
+                        </div>
+                    </div>
+                    <% } %>
                 </div>
             </div>
         <% }) %>

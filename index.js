@@ -1,6 +1,6 @@
 module.exports =  ({ auth, func, db, valid}) => {
     const express = require('express')
-    const { v4: uuidv4 } = require('uuid')
+    const { randomUUID } = require('crypto') 
     const router = express.Router()
     const luxon = require('luxon')
     const path = require('path')
@@ -138,7 +138,7 @@ module.exports =  ({ auth, func, db, valid}) => {
             const endUnix = Math.trunc(endDate.toSeconds())
         
             const newEvent = [
-                uuidv4(),
+                randomUUID(),
                 name,
                 description,
                 startUnix,

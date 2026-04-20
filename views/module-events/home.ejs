@@ -3,12 +3,19 @@
         <div>
             <h2 class="mb-4">Events</h2>
         </div>
-        <div>
-            <a class="btn btn-success" href="/events/create">Create New Event</a>
-        </div>
+        <% console.log(userData.perms) %>
+        <% if (userData?.perms?.ADMINISTRATOR === true || userData?.perms?.MANAGE_EVENTS === true) { %>
+            <div>
+                <a class="btn btn-success" href="/events/create">Create New Event</a>
+            </div>
+        <% } %>
     </div>
 
-    
+    <% if (feedback?.type && feedback?.message) { %>
+        <div class="alert alert-<%= feedback.type %>" role="alert">
+            <%= feedback.message %>
+        </div>
+    <% } %>
 
     <div class="row g-3">
         <% events.forEach(event => { %>

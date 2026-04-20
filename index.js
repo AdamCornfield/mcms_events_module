@@ -11,7 +11,7 @@ module.exports =  ({ auth, func, db, valid}) => {
     const moduleName = 'events' // Set this to the name of your module, it should not include the full tag used, for example the MCMS_events_module, will just be events
 
     router.get('/', (req, res) => {
-            db.query('SELECT * FROM events WHERE end >= UNIX_TIMESTAMP()', (err, results) => {
+            db.query('SELECT * FROM events WHERE end >= UNIX_TIMESTAMP() ORDER by start ASC', (err, results) => {
                 if (err) {
                     res.sendStatus(500)
                     console.error(err)
@@ -32,7 +32,8 @@ module.exports =  ({ auth, func, db, valid}) => {
                                 userData,
                                 pagePath: `module-${moduleName}/home`,
                                 pageTitle: 'Community Events - MCMS',
-                                events: results
+                                events: results,
+                                feedback: req.query
                             })
                         }
                     })
@@ -155,7 +156,7 @@ module.exports =  ({ auth, func, db, valid}) => {
                         console.error(err)
                         res.redirect('/events/create')
                     } else {
-                        res.redirect('/events')
+                        res.redirect('/events?type=success&message=Event Created Successfully')
                     }
                 }
             )
@@ -287,7 +288,7 @@ module.exports =  ({ auth, func, db, valid}) => {
                         console.error(err)
                         res.redirect(`/events/edit/${eventID}`)
                     } else {
-                        res.redirect(`/events/edit/${eventID}`)
+                        res.redirect(`/events?type=success&message=Event edited successfully`)
                     }
                 }
             )
@@ -318,7 +319,7 @@ module.exports =  ({ auth, func, db, valid}) => {
                     })
                 }
 
-                res.redirect('/events')
+                res.redirect('/events?type=success&message=Event deleted successfully')
             }
         })
     })

@@ -1,6 +1,6 @@
 module.exports =  ({ auth, func, db, valid}) => {
     const express = require('express')
-    const { v4: uuidv4 } = require('uuid')
+    const { randomUUID } = require('crypto') 
     const router = express.Router()
     const luxon = require('luxon')
     const path = require('path')
@@ -11,36 +11,34 @@ module.exports =  ({ auth, func, db, valid}) => {
     const moduleName = 'events' // Set this to the name of your module, it should not include the full tag used, for example the MCMS_events_module, will just be events
 
     router.get('/', (req, res) => {
-            db.query('SELECT * FROM events WHERE end >= UNIX_TIMESTAMP() ORDER by start ASC', (err, results) => {
-                if (err) {
-                    res.sendStatus(500)
-                    console.error(err)
-                } else {
-                    results = results.map(event => ({
-                        ...event,
-                        start: DateTime.fromSeconds(event.start),
-                        end: DateTime.fromSeconds(event.end)
-                    }))
-
-                    
-                    func.getUserData(req.user, (success, userData) => {
-                        if (!success) {
-                            console.error('Error fetching user data:', userData)
-                        } else {
-                            res.render('default', {
-                                isAuthenticated: req.isAuthenticated(),
-                                userData,
-                                pagePath: `module-${moduleName}/home`,
-                                pageTitle: 'Community Events - MCMS',
-                                events: results,
-                                feedback: req.query
-                            })
-                        }
-                    })
-                }
-            })
-        }
-    )
+        db.query('SELECT * FROM events WHERE end >= UNIX_TIMESTAMP() ORDER by start ASC', (err, results) => {
+            if (err) {
+                res.sendStatus(500)
+                console.error(err)
+            } else {
+                results = results.map(event => ({
+                    ...event,
+                    start: DateTime.fromSeconds(event.start),
+                    end: DateTime.fromSeconds(event.end)
+                }))
+                
+                func.getUserData(req.user, (success, userData) => {
+                    if (!success) {
+                        console.error('Error fetching user data:', userData)
+                    } else {
+                        res.render('default', {
+                            isAuthenticated: req.isAuthenticated(),
+                            userData,
+                            pagePath: `module-${moduleName}/home`,
+                            pageTitle: 'Community Events - MCMS',
+                            events: results,
+                            feedback: req.query
+                        })
+                    }
+                })
+            }
+        })
+    })
 
     router.route('/create')
     .get(auth.hasPermissions(["MANAGE_EVENTS"], "AND"), (req, res) => {     
@@ -75,7 +73,6 @@ module.exports =  ({ auth, func, db, valid}) => {
         description = valid.sanitiseInput(description || '')
         tags = valid.sanitiseInput(tags || '')
 
-        // Convert datetime-local inputs to Luxon
         let startDate = null
         let endDate = null
 
@@ -104,7 +101,6 @@ module.exports =  ({ auth, func, db, valid}) => {
             }
         }
 
-        // Logical validation
         if (startDate && endDate && endDate <= startDate) {
             errors.push({ field: 'end', message: 'End time must be after start time' })
         }
@@ -132,19 +128,17 @@ module.exports =  ({ auth, func, db, valid}) => {
             })
         
         } else {
-        
-            // Convert to UNIX timestamps (consistent with your system)
             const startUnix = Math.trunc(startDate.toSeconds())
             const endUnix = Math.trunc(endDate.toSeconds())
         
             const newEvent = [
-                uuidv4(),
+                randomUUID(),
                 name,
                 description,
                 startUnix,
                 endUnix,
                 Math.trunc(DateTime.utc().toSeconds()),
-                req.user, // assuming this is userID from passport
+                req.user,
                 tags || null
             ]
         
@@ -204,16 +198,13 @@ module.exports =  ({ auth, func, db, valid}) => {
 
         let errors = []
 
-        // Sanitise inputs
         name = valid.sanitiseInput(name || '')
         description = valid.sanitiseInput(description || '')
         tags = valid.sanitiseInput(tags || '')
 
-        // Convert datetime-local inputs to Luxon
         let startDate = null
         let endDate = null
 
-        // Validation
         if (!name) errors.push({ field: 'name', message: 'Event name is required' })
         
         if (!description) errors.push({ field: 'description', message: 'Description is required' })
@@ -238,7 +229,6 @@ module.exports =  ({ auth, func, db, valid}) => {
             }
         }
 
-        // Logical validation
         if (startDate && endDate && endDate <= startDate) {
             errors.push({ field: 'end', message: 'End time must be after start time' })
         }
@@ -268,8 +258,6 @@ module.exports =  ({ auth, func, db, valid}) => {
             })
 
         } else {
-
-            // Convert to UNIX timestamps
             const startUnix = Math.trunc(startDate.toSeconds())
             const endUnix = Math.trunc(endDate.toSeconds())
 
@@ -299,7 +287,6 @@ module.exports =  ({ auth, func, db, valid}) => {
         const eventID = req.params.eventID
         const confirmDeleteText = valid.sanitiseInput(req.body.confirmDeleteText || '')
 
-        // Fetch the event to get the actual name
         db.query('SELECT name FROM events WHERE eventID = ?', [eventID], (err, results) => {
             if (err) {
                 console.error(err)
@@ -309,9 +296,7 @@ module.exports =  ({ auth, func, db, valid}) => {
             } else {
                 const eventName = results[0].name
                 
-                // Compare case-insensitively
                 if (confirmDeleteText.toLowerCase() === eventName.toLowerCase()) {
-                    // Delete the event
                     db.query('DELETE FROM events WHERE eventID = ?', [eventID], (err, results) => {
                         if (err) {
                             console.error(err)

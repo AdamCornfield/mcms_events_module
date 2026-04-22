@@ -3,7 +3,6 @@
         <div>
             <h2 class="mb-4">Events</h2>
         </div>
-        <% console.log(userData.perms) %>
         <% if (userData?.perms?.ADMINISTRATOR === true || userData?.perms?.MANAGE_EVENTS === true) { %>
             <div>
                 <a class="btn btn-success" href="/events/create">Create New Event</a>

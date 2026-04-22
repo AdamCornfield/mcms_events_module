@@ -1,6 +1,10 @@
 {
   "name": "mcms_events_module",
+<<<<<<< HEAD
   "version": "1.0.4",
+=======
+  "version": "1.0.3",
+>>>>>>> d2789bd... version
   "description": "",
   "main": "index.js",
   "scripts": {
